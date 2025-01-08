@@ -20,6 +20,7 @@
 		}
 	},
 	"require": {
+		"typo3/cms-core": "^12.4",
 		"abraham/twitteroauth": "^4.0"
 	}
 }
