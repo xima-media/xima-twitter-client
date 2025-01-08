@@ -29,12 +29,11 @@ class TweetProcessor implements DataProcessorInterface
         array $processorConfiguration,
         array $processedData
     ): array {
-        $accounts = $cObj->getRecords('tx_ximatwitterclient_domain_model_account', [
-            'uidInList.' => [
-                'field' => 'twitter',
-            ],
-            'pidInList' => 0,
-        ]);
+        $queryConfiguration = ['uidInList.' => ['field' => 'twitter'], 'pidInList' => 0];
+        if (isset($processorConfiguration['accountUids'])) {
+            $queryConfiguration = ['uidInList' => $processorConfiguration['accountUids'], 'pidInList' => 0];
+        }
+        $accounts = $cObj->getRecords('tx_ximatwitterclient_domain_model_account', $queryConfiguration);
 
         $accountUids = array_map(function ($account) {
             return $account['uid'];
