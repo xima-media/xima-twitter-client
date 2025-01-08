@@ -168,7 +168,7 @@ class LatestTweets implements FetchTypeInterface
     {
         $ids = $this->getTweetIdsFromResponse($response);
         $tweetKeys = $this->tweetRepository->findTweetsByIds($ids);
-        $idsToIgnore = array_unique(array_map(function ($tweet) {
+        $idsToIgnore = array_unique(array_map(static function ($tweet) {
             return $tweet['id'];
         }, $tweetKeys));
 

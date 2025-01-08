@@ -2,14 +2,6 @@
 
 This extension uses the Twitter v2 API to download and display tweets.
 
-## Installation
-
-Install via composer
-
-```bash
-composer require xima/xima-twitter-client
-```
-
 To use the Twitter API, you need a developer account, register your application and obtain
 
 * consumer key
@@ -17,17 +9,35 @@ To use the Twitter API, you need a developer account, register your application 
 * api key
 * api secret
 
-Enter the credentials as extension configuration via TYPO3 backend or `LocalConfiguration.php`:
+## Installation
 
-````php
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['access_key'] = '',
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['access_secret'] = '',
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['api_key'] = '',
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['api_secret'] = '',
-$GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['image_storage'] = '1:Images/Twitter',
-````
+1. Install via composer
 
-The configuration `image_storage` is the combined identifier for the downloaded images.
+    ```bash
+    composer require xima/xima-twitter-client
+    ```
+
+2. Include TypoScript setup + constants
+
+    ```typo3_typoscript
+    @import 'EXT:xima_twitter_client/Configuration/TypoScript/setup.typoscript'
+    ```
+
+3. Include PageTS
+
+    ```typo3_typoscript
+    @import 'EXT:xima_twitter_client/Configuration/TSconfig/page.tsconfig'
+    ```
+
+4. Enter the credentials in extension configuration
+
+    ````php
+    $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['access_key'] = '',
+    $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['access_secret'] = '',
+    $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['api_key'] = '',
+    $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['api_secret'] = '',
+    $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['xima_twitter_client']['image_storage'] = '1:Images/Twitter',
+    ````
 
 ## Configuration
 

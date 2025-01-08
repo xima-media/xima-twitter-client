@@ -1,20 +1,8 @@
 <?php
 
-/*
- * This file is part of the TYPO3 CMS project.
- *
- * It is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License, either version 2
- * of the License, or any later version.
- *
- * For the full copyright and license information, please read the
- * LICENSE.txt file that was distributed with this source code.
- *
- * The TYPO3 project - inspiring people to share!
- */
-
 namespace Xima\XimaTwitterClient\DataProcessing;
 
+use Doctrine\DBAL\Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -23,26 +11,6 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 use Xima\XimaTwitterClient\Domain\Model\Tweet;
 
-/**
- * Fetch records from the database, using the default .select syntax from TypoScript.
- * This way, e.g. a FLUIDTEMPLATE cObject can iterate over the array of records.
- * Example TypoScript configuration:
- * 10 = TYPO3\CMS\Frontend\DataProcessing\DatabaseQueryProcessor
- * 10 {
- *   table = tt_address
- *   pidInList = 123
- *   where = company="Acme" AND first_name="Ralph"
- *   orderBy = sorting DESC
- *   as = addresses
- *   dataProcessing {
- *     10 = TYPO3\CMS\Frontend\DataProcessing\FilesProcessor
- *     10 {
- *       references.fieldName = image
- *     }
- *   }
- * }
- * where "as" means the variable to be containing the result-set from the DB query.
- */
 class TweetProcessor implements DataProcessorInterface
 {
     /**
@@ -53,13 +21,14 @@ class TweetProcessor implements DataProcessorInterface
      * @param array $processorConfiguration The configuration of this processor
      * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
      * @return array the processed data as key/value store
+     * @throws Exception
      */
     public function process(
         ContentObjectRenderer $cObj,
         array $contentObjectConfiguration,
         array $processorConfiguration,
         array $processedData
-    ) {
+    ): array {
         $accounts = $cObj->getRecords('tx_ximatwitterclient_domain_model_account', [
             'uidInList.' => [
                 'field' => 'twitter',
@@ -85,7 +54,7 @@ class TweetProcessor implements DataProcessorInterface
             $query->setMaxResults($maxItemConf);
         }
 
-        $results = $query->execute()->fetchAllAssociative();
+        $results = $query->executeQuery()->fetchAllAssociative();
 
         $dataMapper = GeneralUtility::makeInstance(DataMapper::class);
         $tweets = $dataMapper->map(Tweet::class, $results);
